@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krishi Sahayata - Farmer Assistance Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #104d12;
+            --secondary: #6c0d0d;
+            --light: #f5f5f5;
+            --dark: #333;
+            --accent: #0a5b9d;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(to right, var(--primary), #135216);
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .language-selector {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .lang-btn.active {
+            background: white;
+            color: var(--primary);
+        }
+        
+        /* Page Container */
+        .page-container {
+            flex: 1;
+            display: none;
+            padding: 20px 0;
+        }
+        
+        .page-container.active {
+            display: block;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: url('c:\Users\yukta\Downloads\Vibrant landscape of a wide open field in the countryside filled with a variety of crops.jpg') no-repeat center center/cover;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #842705;
+        }
+        
+        /* Section Styles */
+        .section {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            margin: 10px auto;
+        }
+        
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Features Section */
+        .features {
+            background-color: #e8f5e9;
+            border-radius: 10px;
+            padding: 40px;
+            margin: 30px 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* Calculator Styles */
+        .calculator {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        /* Market Rates */
+        .market-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .market-table th, .market-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .market-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .market-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Disease Gallery */
+        .disease-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .disease-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .disease-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .disease-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .disease-card:hover .disease-image img {
+            transform: scale(1.05);
+        }
+        
+        .disease-content {
+            padding: 20px;
+        }
+        
+        /* Weather Section */
+        .weather-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .weather-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .weather-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin: 15px 0;
+        }
+        
+        /* Contact Form */
+        .contact-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(2, 7, 54, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--secondary);
+        }
+        
+        .footer-links a {
+            display: block;
+            color: #ccc;
+            margin-bottom: 10px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #857b7b;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                height: 300px;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-seedling"></i>
+                <h1>Krishi Sahayata</h1>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="crop-guide">Crop Guide</a></li>
+                    <li><a href="#" class="nav-link" data-page="market-rates">Market Rates</a></li>
+                    <li><a href="#" class="nav-link" data-page="bio-extracts">Bio Extracts</a></li>
+                    <li><a href="#" class="nav-link" data-page="disease-gallery">Disease Gallery</a></li>
+                    <li><a href="#" class="nav-link" data-page="weather">Weather</a></li>
+                    <li><a href="#" class="nav-link" data-page="contact">Contact Us</a></li>
+                </ul>
+            </nav>
+            
+            <div class="language-selector">
+                <button class="lang-btn active">English</button>
+                <button class="lang-btn">Hindi</button>
+                <button class="lang-btn">Marathi</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Home Page -->
+    <div id="home" class="page-container active">
+        <div class="hero">
+            <div class="hero-content">
+                <h2>Empowering Farmers with Technology</h2>
+                <p>Get expert guidance on crops, weather, market prices, and disease management all in one place.</p>
+                <a href="#" class="btn nav-link" data-page="crop-guide">Explore Crop Guide</a>
+            </div>
+        </div>
+
+        <div class="container">
+            <section class="about">
+                <h2 class="section-title">About Us</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Krishi Sahayata is a comprehensive platform designed to assist farmers in making informed decisions about their farming activities. Our mission is to empower farmers with technology and knowledge to improve their yield and profitability.</p>
+                        <p>We provide detailed information about crops, including water requirements, fertilizers needed, and expected yield. Our market rates section helps farmers get the best prices for their produce, and our disease gallery helps identify and treat common crop diseases.</p>
+                        <p>This platform is available in three languages - English, Hindi, and Marathi - to ensure that farmers across Maharashtra can benefit from our services.</p>
+                    </div>
+                    <div class="about-image">
+                        <img src="c:\Users\yukta\Downloads\Vibrant landscape of a wide open field in the countryside filled with a variety of crops.jpg" alt="Farmer in field">
+                    </div>
+                </div>
+            </section>
+
+            <section class="features">
+                <h2 class="section-title">Our Services</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3>Crop Guide</h3>
+                        <p>Detailed information about various crops, including water requirements, fertilizers, and expected yield.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3>Area Calculator</h3>
+                        <p>Calculate the area of your land and get recommendations for crops based on your land size.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Market Rates</h3>
+                        <p>Stay updated with the latest market prices and demand for various crops in your region.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Disease Gallery</h3>
+                        <p>Identify common crop diseases and learn about effective treatments and prevention methods.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cloud-sun"></i>
+                        </div>
+                        <h3>Weather Forecast</h3>
+                        <p>Get accurate weather forecasts for your region to plan your farming activities effectively.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3>Connect with Traders</h3>
+                        <p>Directly connect with traders and dealers to sell your produce at the best prices.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Crop Guide Page -->
+    <div id="crop-guide" class="page-container">
+        <div class="container">
+            <h2 class="section-title">Crop Guide & Area Calculator</h2>
+            
+            <div class="calculator">
+                <h3>Area Calculator</h3>
+                <p>Enter your field details to get crop recommendations and resource requirements</p>
+                
+                <div class="form-group">
+                    <label for="area">Area (in acres)</label>
+                    <input type="number" id="area" min="1" max="1000" value="5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="crop-type">Select Crop Type</label>
+                    <select id="crop-type">
+                        <option value="">-- Select Crop --</option>
+                        <option value="wheat">Wheat</option>
+                        <option value="rice">Rice</option>
+                        <option value="corn">Corn</option>
+                        <option value="sugarcane">Sugarcane</option>
+                        <option value="cotton">Cotton</option>
+                        <option value="soybean">Soybean</option>
+                    </select>
+                </div>
+                
+                <button class="btn" id="calculate-btn">Calculate Requirements</button>
+                
+                <div class="results" id="calculation-results">
+                    <h3>Crop Cultivation Details</h3>
+                    <div id="results-content"></div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Popular Crops in Maharashtra</h3>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-wheat-alt"></i>
+                        </div>
+                        <h4>Wheat</h4>
+                        <p>Best grown in well-drained loamy soil. Requires moderate water and cool temperatures during growth.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-rice"></i>
+                        </div>
+                        <h4>Rice</h4>
+                        <p>Requires flooded fields during growth. Ideal for regions with high rainfall or irrigation facilities.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-corn"></i>
+                        </div>
+                        <h4>Corn</h4>
+                        <p>Grows well in warm weather with well-drained soil. Requires regular watering during growth period.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Market Rates Page -->
+    <div id="market-rates" class="page-container">
+        <div class="container">
+            <h2 class="section-title">Market Rates & Demand</h2>
+            
+            <div class="calculator">
+                <h3>Current Market Prices</h3>
+                <p>Latest market rates for agricultural produce in Maharashtra (per quintal)</p>
+                
+                <table class="market-table">
+                    <thead>
+                        <tr>
+                            <th>Crop</th>
+                            <th>Minimum Price</th>
+                            <th>Maximum Price</th>
+                            <th>Demand Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Wheat</td>
+                            <td>₹2,100</td>
+                            <td>₹2,400</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td>Rice</td>
+                            <td>₹2,800</td>
+                            <td>₹3,200</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td>Corn</td>
+                            <td>₹1,700</td>
+                            <td>₹1,900</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td>Sugarcane</td>
+                            <td>₹3,200</td>
+                            <td>₹3,500</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td>Cotton</td>
+                            <td>₹5,800</td>
+                            <td>₹6,500</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>Soybean</td>
+                            <td>₹3,900</td>
+                            <td>₹4,300</td>
+                            <td>High</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Connect with Traders</h3>
+                <p>Click the "Buy" button next to any product to get connected with verified traders and dealers</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4>Organic Fertilizers</h4>
+                        <p>High-quality organic fertilizers for improved soil health</p>
+                        <button class="btn">Buy Now</button>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>Bio Pesticides</h4>
+                        <p>Eco-friendly pesticides for healthy crop protection</p>
+                        <button class="btn">Buy Now</button>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>Seeds</h4>
+                        <p>Certified high-yield seeds for various crops</p>
+                        <button class="btn">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bio Extracts Page -->
+    <div id="bio-extracts" class="page-container">
+        <div class="container">
+            <h2 class="section-title">Bio Extracts & Organic Solutions</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Neem Extract</h3>
+                    <p>Natural pesticide effective against multiple pests. Mix 50ml with 1 liter of water and spray on crops.</p>
+                    <button class="btn">Buy Now</button>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mortar-pestle"></i>
+                    </div>
+                    <h3>Garlic-Chili Spray</h3>
+                    <p>Organic solution to deter insects. Crush 100g garlic and 100g chili, mix with 1 liter water, strain and spray.</p>
+                    <button class="btn">Buy Now</button>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3>Compost Tea</h3>
+                    <p>Nutrient-rich liquid fertilizer. Steep compost in water for 3-5 days, dilute 1:10 with water before use.</p>
+                    <button class="btn">Buy Now</button>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>Seaweed Extract</h3>
+                    <p>Growth promoter rich in micronutrients. Dilute 20ml per liter of water and spray on leaves.</p>
+                    <button class="btn">Buy Now</button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">How to Use Bio Extracts</h3>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Bio extracts are concentrated natural solutions made from plants, herbs, and other organic materials. They provide an eco-friendly alternative to chemical pesticides and fertilizers.</p>
+                        <p><strong>Application Guidelines:</strong></p>
+                        <ul>
+                            <li>Always dilute extracts as per instructions</li>
+                            <li>Test on a small area before full application</li>
+                            <li>Apply during cooler parts of the day (early morning or late evening)</li>
+                            <li>Store in cool, dark places away from direct sunlight</li>
+                            <li>Use within 2-3 weeks of preparation for best results</li>
+                        </ul>
+                    </div>
+                    <div class="about-image">
+                        <img src="c:\Users\yukta\Downloads\Colours of April.jpg" alt="Organic farming">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disease Gallery Page -->
+    <div id="disease-gallery" class="page-container">
+        <div class="container">
+            <h2 class="section-title">Crop Disease Gallery</h2>
+            
+            <div class="disease-grid">
+                <div class="disease-card">
+                    <div class="disease-image">
+                        <img src="23975111.jpg" alt="Wheat Rust">
+                    </div>
+                    <div class="disease-content">
+                        <h3>Wheat Rust</h3>
+                        <p><strong>Symptoms:</strong> Orange-brown pustules on leaves and stems</p>
+                        <p><strong>Treatment:</strong> Apply fungicides containing triazoles. Remove and destroy infected plants.</p>
+                    </div>
+                </div>
+                
+                <div class="disease-card">
+                    <div class="disease-image">
+                        <img src="c:\Users\yukta\Downloads\papaya.jpg" alt="Rice Blast">
+                    </div>
+                    <div class="disease-content">
+                        <h3>Rice Blast</h3>
+                        <p><strong>Symptoms:</strong> Diamond-shaped lesions with gray centers and brown borders</p>
+                        <p><strong>Treatment:</strong> Use resistant varieties. Apply silica fertilizers. Fungicide spray with tricyclazole.</p>
+                    </div>
+                </div>
+                
+                <div class="disease-card">
+                    <div class="disease-image">
+                        <img src="c:\Users\yukta\Downloads\Soybeans.jpg" alt="Leaf Holes">
+                    </div>
+                    <div class="disease-content">
+                        <h3>Leaf holes</h3>
+                        <p><strong>Symptoms:</strong> Large, distorted galls on ears, tassels, stalks and leaves</p>
+                        <p><strong>Treatment:</strong> Use neem oil spray or Bacillus thuringiensis (Bt) and remove visible pests to control leaf holes..</p>
+                    </div>
+                </div>
+                
+                <div class="disease-card">
+                    <div class="disease-image">
+                        <img src="c:\Users\yukta\Downloads\tomato.jpg" alt="Cotton Root Rot">
+                    </div>
+                    <div class="disease-content">
+                        <h3>Cotton Root Rot</h3>
+                        <p><strong>Symptoms:</strong> Sudden wilting and death of plants, reddish-brown discoloration of vascular tissue</p>
+                        <p><strong>Treatment:</strong> Soil solarization. Improve drainage. Use resistant varieties.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Preventive Measures</h3>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Prevention is always better than cure when it comes to crop diseases. Follow these practices to minimize disease outbreaks:</p>
+                        <ul>
+                            <li>Use certified disease-free seeds</li>
+                            <li>Practice crop rotation to break disease cycles</li>
+                            <li>Maintain proper plant spacing for good air circulation</li>
+                            <li>Monitor fields regularly for early signs of disease</li>
+                            <li>Remove and destroy infected plant material</li>
+                            <li>Keep irrigation water off leaves when possible</li>
+                            <li>Use balanced fertilization to maintain plant health</li>
+                        </ul>
+                    </div>
+                    <div class="about-image">
+                        <img src="c:\Users\yukta\Downloads\Farm land field stock image_ Image of organic, growth - 28599987.jpg" alt="Farm inspection">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weather Page -->
+    <div id="weather" class="page-container">
+        <div class="container">
+            <h2 class="section-title">Weather Forecast</h2>
+            
+            <div class="calculator">
+                <h3>Select Region for Weather Information</h3>
+                
+                <div class="form-group">
+                    <label for="region">Select Region</label>
+                    <select id="region">
+                        <option value="">-- Select Region --</option>
+                        <option value="mumbai">Mumbai</option>
+                        <option value="pune">Pune</option>
+                        <option value="nagpur">Nagpur</option>
+                        <option value="nashik">Nashik</option>
+                        <option value="aurangabad">Aurangabad</option>
+                        <option value="amravati">Amravati</option>
+                        <option value="kolhapur">Kolhapur</option>
+                    </select>
+                </div>
+                
+                <button class="btn" id="get-weather-btn">Get Weather</button>
+            </div>
+            
+            <div class="weather-container" id="weather-results">
+                <!-- Weather data will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Weather Advisory for Farmers</h3>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Weather plays a crucial role in agricultural success. Here are some general guidelines based on weather conditions:</p>
+                        
+                        <p><strong>During High Rainfall:</strong></p>
+                        <ul>
+                            <li>Ensure proper drainage in fields</li>
+                            <li>Delay fertilizer application</li>
+                            <li>Monitor for fungal diseases</li>
+                        </ul>
+                        
+                        <p><strong>During Drought Conditions:</strong></p>
+                        <ul>
+                            <li>Use drip irrigation to conserve water</li>
+                            <li>Apply mulch to reduce evaporation</li>
+                            <li>Consider drought-resistant crop varieties</li>
+                        </ul>
+                        
+                        <p><strong>During High Temperatures:</strong></p>
+                        <ul>
+                            <li>Water plants during cooler parts of the day</li>
+                            <li>Provide shade for sensitive crops</li>
+                            <li>Watch for heat stress symptoms</li>
+                        </ul>
+                    </div>
+                    <div class="about-image">
+                        <img src="c:\Users\yukta\Downloads\Rainy day.jpg" alt="Weather monitoring">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+            
+            <div class="section">
+                <h3 class="section-title">Our Offices</h3>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4>Pune Office</h4>
+                        <p>Agricultural Complex, Shivajinagar, Pune</p>
+                        <p>Phone: +91 9876543210</p>
+                        <p>Email: pune@krishisahayata.com</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>Nagpur Office</h4>
+                        <p>Farmers Plaza, Sitabuldi, Nagpur</p>
+                        <p>Phone: +91 9876543211</p>
+                        <p>Email: nagpur@krishisahayata.com</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>Nashik Office</h4>
+                        <p>Agro Center, College Road, Nashik</p>
+                        <p>Phone: +91 9876543212</p>
+                        <p>Email: nashik@krishisahayata.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="#" class="nav-link" data-page="home">Home</a>
+                        <a href="#" class="nav-link" data-page="crop-guide">Crop Guide</a>
+                        <a href="#" class="nav-link" data-page="market-rates">Market Rates</a>
+                        <a href="#" class="nav-link" data-page="bio-extracts">Bio Extracts</a>
+                        <a href="#" class="nav-link" data-page="disease-gallery">Disease Gallery</a>
+                        <a href="#" class="nav-link" data-page="weather">Weather</a>
+                        <a href="#" class="nav-link" data-page="contact">Contact Us</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Government Schemes</h3>
+                    <div class="footer-links">
+                        <a href="https://pmkisan.gov.in/homenew.aspx">PM-KISAN</a>
+                        <a href="https://www.india.gov.in/spotlight/soil-health-card#tab=tab-1">Soil Health Card</a>
+                        <a href="https://pmfby.gov.in/">Pradhan Mantri Fasal Bima Yojana</a>
+                        <a href="https://www.enam.gov.in/web/">National Agriculture Market (eNAM)</a>
+                        <a href="https://pmksy.gov.in/">Krishi Sinchai Yojana</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Information</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Agricultural Complex, Pune, Maharashtra</p>
+                    <p><i class="fas fa-phone"></i> +91 9876543210</p>
+                    <p><i class="fas fa-envelope"></i> info@krishisahayata.com</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Krishi Sahayata. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation functionality
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Hide all pages
+                document.querySelectorAll('.page-container').forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Show the selected page
+                const pageId = this.getAttribute('data-page');
+                document.getElementById(pageId).classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // Language selector functionality
+        document.querySelectorAll('.lang-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // In a real implementation, this would change the language of the content
+                alert('Language changed to ' + this.textContent);
+            });
+        });
+        
+        // Area calculator functionality
+        document.getElementById('calculate-btn').addEventListener('click', function() {
+            const area = document.getElementById('area').value;
+            const cropType = document.getElementById('crop-type').value;
+            
+            if (!area || !cropType) {
+                alert('Please enter area and select a crop type');
+                return;
+            }
+            
+            // Crop data (in a real application, this would come from a database)
+            const cropData = {
+                wheat: {
+                    water: 500,
+                    nitrogen: 120,
+                    phosphorus: 60,
+                    potassium: 40,
+                    yield: 20
+                },
+                rice: {
+                    water: 1200,
+                    nitrogen: 150,
+                    phosphorus: 70,
+                    potassium: 60,
+                    yield: 25
+                },
+                corn: {
+                    water: 600,
+                    nitrogen: 130,
+                    phosphorus: 50,
+                    potassium: 50,
+                    yield: 22
+                },
+                sugarcane: {
+                    water: 1500,
+                    nitrogen: 200,
+                    phosphorus: 80,
+                    potassium: 100,
+                    yield: 350
+                },
+                cotton: {
+                    water: 700,
+                    nitrogen: 90,
+                    phosphorus: 40,
+                    potassium: 30,
+                    yield: 15
+                },
+                soybean: {
+                    water: 450,
+                    nitrogen: 80,
+                    phosphorus: 50,
+                    potassium: 60,
+                    yield: 18
+                }
+            };
+            
+            const data = cropData[cropType];
+            const resultsContent = document.getElementById('results-content');
+            
+            resultsContent.innerHTML = `
+                <p><strong>Crop:</strong> ${document.getElementById('crop-type').options[document.getElementById('crop-type').selectedIndex].text}</p>
+                <p><strong>Area:</strong> ${area} acres</p>
+                <p><strong>Water required:</strong> ${data.water * area} liters per season</p>
+                <p><strong>Fertilizers required:</strong></p>
+                <ul>
+                    <li>Nitrogen: ${data.nitrogen * area} kg</li>
+                    <li>Phosphorus: ${data.phosphorus * area} kg</li>
+                    <li>Potassium: ${data.potassium * area} kg</li>
+                </ul>
+                <p><strong>Expected yield:</strong> ${data.yield * area} quintals</p>
+            `;
+            
+            document.getElementById('calculation-results').style.display = 'block';
+        });
+        
+        // Weather functionality
+        document.getElementById('get-weather-btn').addEventListener('click', function() {
+            const region = document.getElementById('region').value;
+            
+            if (!region) {
+                alert('Please select a region');
+                return;
+            }
+            
+            // Mock weather data (in a real application, this would come from an API)
+            const weatherData = {
+                mumbai: { temp: 28, humidity: 75, condition: 'Partly Cloudy', rainfall: '10%' },
+                pune: { temp: 26, humidity: 65, condition: 'Sunny', rainfall: '0%' },
+                nagpur: { temp: 32, humidity: 55, condition: 'Sunny', rainfall: '0%' },
+                nashik: { temp: 25, humidity: 70, condition: 'Cloudy', rainfall: '30%' },
+                aurangabad: { temp: 29, humidity: 60, condition: 'Sunny', rainfall: '0%' },
+                amravati: { temp: 30, humidity: 58, condition: 'Partly Cloudy', rainfall: '5%' },
+                kolhapur: { temp: 27, humidity: 72, condition: 'Cloudy', rainfall: '20%' }
+            };
+            
+            const data = weatherData[region];
+            const weatherResults = document.getElementById('weather-results');
+            
+            weatherResults.innerHTML = `
+                <div class="weather-card">
+                    <h3>${document.getElementById('region').options[document.getElementById('region').selectedIndex].text}</h3>
+                    <div class="weather-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <p><strong>Temperature:</strong> ${data.temp}°C</p>
+                    <p><strong>Humidity:</strong> ${data.humidity}%</p>
+                    <p><strong>Condition:</strong> ${data.condition}</p>
+                    <p><strong>Chance of Rain:</strong> ${data.rainfall}</p>
+                </div>
+                
+                <div class="weather-card">
+                    <h3>5-Day Forecast</h3>
+                    <div class="weather-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <p><strong>Tomorrow:</strong> ${data.temp + 1}°C, Mostly ${data.condition}</p>
+                    <p><strong>Day 2:</strong> ${data.temp}°C, ${data.condition}</p>
+                    <p><strong>Day 3:</strong> ${data.temp - 1}°C, Partly Cloudy</p>
+                    <p><strong>Day 4:</strong> ${data.temp}°C, ${data.condition}</p>
+                    <p><strong>Day 5:</strong> ${data.temp + 2}°C, Sunny</p>
+                </div>
+            `;
+        });
+        
+        // Buy now buttons functionality
+        document.querySelectorAll('.btn').forEach(button => {
+            if (button.textContent === 'Buy Now') {
+                button.addEventListener('click', function() {
+                    // In a real implementation, this would redirect to the contact page
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    document.querySelector('.nav-link[data-page="contact"]').classList.add('active');
+                    
+                    document.querySelectorAll('.page-container').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    document.getElementById('contact').classList.add('active');
+                    
+                    window.scrollTo(0, 0);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
