@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroForge - Voice Translation System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 32px 64px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .page-subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .translation-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .language-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .language-select, .voice-select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            color: #1f2937;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .language-select:focus, .voice-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .upload-area {
+            border: 3px dashed #d1d5db;
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover, .upload-area.drag-active {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .upload-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-text {
+            color: #6b7280;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .supported-formats {
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+        }
+
+        .upload-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-section {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 2rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 3rem;
+        }
+
+        .result-card {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #166534;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .language-info {
+            background: #e0e7ff;
+            border: 1px solid #c7d2fe;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .text-box {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            min-height: 100px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .text-box.original {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .text-box.translated {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        /* Enhanced Voice Player Section */
+        .voice-player-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            color: white;
+        }
+
+        .voice-player-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .voice-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .main-play-btn {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .main-play-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 8px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 400px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .control-btn {
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .volume-slider {
+            width: 100px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .main-card {
+                padding: 2rem;
+            }
+            
+            .language-selection {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .action-buttons, .control-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+
+            .main-play-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-section">
+            <div class="logo">
+                <i class="fas fa-volume-up"></i>
+            </div>
+            <h2 style="color: white;">NeuroForge Voice Translation</h2>
+        </div>
+        <div class="user-section">
+            <span>Welcome, <strong id="userName">User</strong></span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-card">
+            <h1 class="page-title">🎵 Voice Translation System</h1>
+            <p class="page-subtitle">Upload audio/video in any language and hear the translation with high-quality voice</p>
+
+            <div class="translation-form">
+                <div class="language-selection">
+                    <div class="form-group">
+                        <label class="form-label" for="sourceLanguage">
+                            <i class="fas fa-microphone"></i> Source Language (Input)
+                        </label>
+                        <select id="sourceLanguage" class="language-select">
+                            <option value="">Loading languages...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="targetLanguage">
+                            <i class="fas fa-language"></i> Target Language (Output)
+                        </label>
+                        <select id="targetLanguage" class="language-select">
+                            <option value="">Loading languages...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="voiceType">
+                        <i class="fas fa-user-tie"></i> Voice Options
+                    </label>
+                    <select id="voiceType" class="voice-select">
+                        <option value="standard">Standard Voice</option>
+                        <option value="slow">Slow Speech</option>
+                        <option value="fast">Fast Speech</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-upload"></i> Upload Audio/Video File
+                    </label>
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <h3 class="upload-title">Drag & Drop or Click to Upload</h3>
+                        <p class="upload-text">Select your audio or video file in any language</p>
+                        <p class="supported-formats">
+                            Supported formats: MP3, WAV, MP4, AVI, MOV, M4A, OGG, WEBM, FLAC (Max: 50MB)
+                        </p>
+                        <input type="file" id="fileInput" style="display: none;" 
+                               accept=".mp3,.wav,.mp4,.avi,.mov,.m4a,.ogg,.webm,.flac" 
+                               onchange="handleFileSelect(event)">
+                    </div>
+                    <div class="error-message" id="errorMessage"></div>
+                </div>
+
+                <button class="upload-btn" id="uploadBtn" onclick="uploadFile()" disabled>
+                    <i class="fas fa-magic"></i> Generate Voice Translation
+                </button>
+            </div>
+
+            <!-- Loading Section -->
+            <div class="loading-section" id="loadingSection">
+                <div class="loading-spinner"></div>
+                <h3>Processing your file...</h3>
+                <p>Detecting language, translating, and generating high-quality voice...</p>
+            </div>
+
+            <!-- Results Section -->
+            <div class="result-section" id="resultSection">
+                <div class="result-card">
+                    <h3 class="result-title">
+                        <i class="fas fa-check-circle"></i> Voice Translation Complete
+                    </h3>
+
+                    <div class="language-info" id="languageInfo">
+                        <!-- Language detection info -->
+                    </div>
+                    
+                    <div>
+                        <h4><i class="fas fa-file-audio"></i> Original Text</h4>
+                        <div class="text-box original" id="originalText"></div>
+                    </div>
+                    
+                    <div>
+                        <h4><i class="fas fa-language"></i> Translated Text</h4>
+                        <div class="text-box translated" id="translatedText"></div>
+                    </div>
+
+                    <!-- Enhanced Voice Player Section -->
+                    <div class="voice-player-section" id="voicePlayerSection" style="display: none;">
+                        <h4 class="voice-player-title">
+                            <i class="fas fa-volume-up"></i> Listen to Translation
+                        </h4>
+                        
+                        <div class="voice-controls">
+                            <button class="main-play-btn" id="mainPlayBtn" onclick="toggleVoicePlayback()">
+                                <i class="fas fa-play" id="mainPlayIcon"></i>
+                            </button>
+
+                            <div class="progress-container" id="progressContainer" onclick="seekAudio(event)">
+                                <div class="progress-bar" id="progressBar"></div>
+                            </div>
+
+                            <div class="time-display">
+                                <span id="currentTime">0:00</span>
+                                <span id="totalTime">0:00</span>
+                            </div>
+
+                            <div class="control-buttons">
+                                <button class="control-btn" onclick="replayAudio()">
+                                    <i class="fas fa-redo"></i> Replay
+                                </button>
+                                <button class="control-btn" onclick="changePlaybackSpeed()">
+                                    <i class="fas fa-tachometer-alt"></i> Speed: <span id="speedDisplay">1x</span>
+                                </button>
+                                <div class="volume-control">
+                                    <i class="fas fa-volume-up"></i>
+                                    <input type="range" class="volume-slider" id="volumeSlider" 
+                                           min="0" max="100" value="100" onchange="changeVolume(this.value)">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <audio id="voicePlayer" style="display: none;" preload="none">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="copyToClipboard('translatedText')">
+                            <i class="fas fa-copy"></i> Copy Translation
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadVoice()">
+                            <i class="fas fa-download"></i> Download Voice
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadResult()">
+                            <i class="fas fa-file-download"></i> Download Text
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetForm()">
+                            <i class="fas fa-refresh"></i> New Translation
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFile = null;
+        let translationResult = null;
+        let voicePlayer = null;
+        let isPlaying = false;
+        let currentPlaybackRate = 1.0;
+
+        // Check authentication
+        const session = sessionStorage.getItem('userSession');
+        if (!session) {
+            window.location.href = '/login';
+        } else {
+            const user = JSON.parse(session);
+            document.getElementById('userName').textContent = user.name;
+        }
+
+        // Initialize on page load
+        loadSourceLanguages();
+        loadTargetLanguages();
+        initializeVoicePlayer();
+
+        function initializeVoicePlayer() {
+            voicePlayer = document.getElementById('voicePlayer');
+            
+            voicePlayer.addEventListener('loadedmetadata', updateAudioInfo);
+            voicePlayer.addEventListener('timeupdate', updateProgress);
+            voicePlayer.addEventListener('ended', onAudioEnded);
+            voicePlayer.addEventListener('error', onAudioError);
+        }
+
+        async function loadSourceLanguages() {
+            try {
+                const response = await fetch('/source_languages');
+                const data = await response.json();
+                
+                const select = document.getElementById('sourceLanguage');
+                select.innerHTML = '<option value="auto">🌍 Auto-Detect Language</option>';
+                
+                for (const [code, name] of Object.entries(data.languages)) {
+                    if (code !== 'auto') {
+                        const option = document.createElement('option');
+                        option.value = code;
+                        option.textContent = name;
+                        select.appendChild(option);
+                    }
+                }
+            } catch (error) {
+                showError('Failed to load source languages');
+            }
+        }
+
+        async function loadTargetLanguages() {
+            try {
+                const response = await fetch('/languages');
+                const data = await response.json();
+                
+                const select = document.getElementById('targetLanguage');
+                select.innerHTML = '<option value="">Select target language</option>';
+                
+                for (const [code, name] of Object.entries(data.languages)) {
+                    const option = document.createElement('option');
+                    option.value = code;
+                    option.textContent = name;
+                    select.appendChild(option);
+                }
+            } catch (error) {
+                showError('Failed to load target languages');
+            }
+        }
+
+        // File handling
+        const uploadArea = document.getElementById('uploadArea');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-active');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('drag-active');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-active');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect({ target: { files } });
+            }
+        });
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const allowedExtensions = ['mp3', 'wav', 'mp4', 'avi', 'mov', 'm4a', 'ogg', 'webm', 'flac'];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            
+            if (!allowedExtensions.includes(fileExtension)) {
+                showError(`Invalid file type. Please select: ${allowedExtensions.join(', ').toUpperCase()}`);
+                return;
+            }
+
+            if (file.size > 50 * 1024 * 1024) {
+                showError('File size must be less than 50MB');
+                return;
+            }
+
+            selectedFile = file;
+            
+            const uploadArea = document.getElementById('uploadArea');
+            uploadArea.innerHTML = `
+                <i class="fas fa-file-audio upload-icon" style="color: #10b981;"></i>
+                <h3 class="upload-title" style="color: #10b981;">File Selected</h3>
+                <p class="upload-text">${file.name}</p>
+                <p class="supported-formats">Size: ${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+            `;
+            
+            document.getElementById('uploadBtn').disabled = false;
+            hideError();
+        }
+
+        async function uploadFile() {
+            const sourceLanguage = document.getElementById('sourceLanguage').value;
+            const targetLanguage = document.getElementById('targetLanguage').value;
+            const voiceType = document.getElementById('voiceType').value;
+            
+            if (!selectedFile) {
+                showError('Please select a file first');
+                return;
+            }
+            
+            if (!sourceLanguage) {
+                showError('Please select a source language');
+                return;
+            }
+            
+            if (!targetLanguage) {
+                showError('Please select a target language');
+                return;
+            }
+
+            // Show loading
+            document.querySelector('.translation-form').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('loadingSection').style.display = 'block';
+
+            try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                formData.append('source_language', sourceLanguage);
+                formData.append('target_language', targetLanguage);
+                formData.append('voice_type', voiceType);
+
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    translationResult = result;
+                    showResults(result);
+                } else {
+                    showError(result.error || 'Translation failed');
+                    showForm();
+                }
+            } catch (error) {
+                showError('Upload failed. Please check your connection.');
+                showForm();
+            }
+        }
+
+        function showResults(result) {
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('originalText').textContent = result.original_text;
+            document.getElementById('translatedText').textContent = result.translated_text;
+            
+            // Show language info
+            const sourceSelect = document.getElementById('sourceLanguage');
+            const targetSelect = document.getElementById('targetLanguage');
+            const sourceLangName = sourceSelect.options[sourceSelect.selectedIndex].text;
+            const targetLangName = targetSelect.options[targetSelect.selectedIndex].text;
+            const detectedLangName = getLanguageName(result.detected_source_language);
+            
+            const languageInfo = document.getElementById('languageInfo');
+            if (result.source_language === 'auto' || sourceSelect.value === 'auto') {
+                languageInfo.innerHTML = `
+                    <strong>🔍 Language Detection:</strong> Detected "${detectedLangName}" → Translated to "${targetLangName}"<br>
+                    <strong>🎵 Voice Quality:</strong> ${result.voice_type} (${result.audio_duration?.toFixed(1)}s)
+                `;
+            } else {
+                languageInfo.innerHTML = `
+                    <strong>🌍 Translation:</strong> "${sourceLangName}" → "${targetLangName}"<br>
+                    <strong>🎵 Voice Quality:</strong> ${result.voice_type} (${result.audio_duration?.toFixed(1)}s)
+                `;
+            }
+            
+            // Setup voice player
+            if (result.audio_available && result.audio_url) {
+                const voicePlayerSection = document.getElementById('voicePlayerSection');
+                const voicePlayer = document.getElementById('voicePlayer');
+                
+                voicePlayer.src = result.audio_url;
+                voicePlayerSection.style.display = 'block';
+            }
+            
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        // Voice Player Controls
+        function toggleVoicePlayback() {
+            if (!voicePlayer.src) {
+                showError('No voice available');
+                return;
+            }
+            
+            if (isPlaying) {
+                voicePlayer.pause();
+                updatePlayButton(false);
+            } else {
+                voicePlayer.play().then(() => {
+                    updatePlayButton(true);
+                }).catch(error => {
+                    showError('Failed to play voice');
+                    console.error('Voice play error:', error);
+                });
+            }
+        }
+
+        function updatePlayButton(playing) {
+            isPlaying = playing;
+            const playIcon = document.getElementById('mainPlayIcon');
+            
+            if (playing) {
+                playIcon.className = 'fas fa-pause';
+            } else {
+                playIcon.className = 'fas fa-play';
+            }
+        }
+
+        function updateAudioInfo() {
+            const totalTime = document.getElementById('totalTime');
+            if (voicePlayer.duration) {
+                totalTime.textContent = formatTime(voicePlayer.duration);
+            }
+        }
+
+        function updateProgress() {
+            if (voicePlayer.duration) {
+                const progress = (voicePlayer.currentTime / voicePlayer.duration) * 100;
+                document.getElementById('progressBar').style.width = progress + '%';
+                document.getElementById('currentTime').textContent = formatTime(voicePlayer.currentTime);
+            }
+        }
+
+        function seekAudio(event) {
+            if (voicePlayer.duration) {
+                const progressContainer = document.getElementById('progressContainer');
+                const rect = progressContainer.getBoundingClientRect();
+                const clickX = event.clientX - rect.left;
+                const width = rect.width;
+                const seekTime = (clickX / width) * voicePlayer.duration;
+                voicePlayer.currentTime = seekTime;
+            }
+        }
+
+        function replayAudio() {
+            voicePlayer.currentTime = 0;
+            voicePlayer.play().then(() => {
+                updatePlayButton(true);
+            });
+        }
+
+        function changePlaybackSpeed() {
+            const speeds = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
+            const currentIndex = speeds.indexOf(currentPlaybackRate);
+            const nextIndex = (currentIndex + 1) % speeds.length;
+            currentPlaybackRate = speeds[nextIndex];
+            
+            voicePlayer.playbackRate = currentPlaybackRate;
+            document.getElementById('speedDisplay').textContent = currentPlaybackRate + 'x';
+        }
+
+        function changeVolume(value) {
+            voicePlayer.volume = value / 100;
+        }
+
+        function onAudioEnded() {
+            updatePlayButton(false);
+            voicePlayer.currentTime = 0;
+            updateProgress();
+        }
+
+        function onAudioError(error) {
+            console.error('Audio error:', error);
+            showError('Error playing voice. Please try again.');
+            updatePlayButton(false);
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        // Utility functions
+        function getLanguageName(code) {
+            const sourceSelect = document.getElementById('sourceLanguage');
+            for (let i = 0; i < sourceSelect.options.length; i++) {
+                if (sourceSelect.options[i].value === code) {
+                    return sourceSelect.options[i].text;
+                }
+            }
+            return code.toUpperCase();
+        }
+
+        function showForm() {
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'none';
+            document.querySelector('.translation-form').style.display = 'block';
+        }
+
+        function resetForm() {
+            selectedFile = null;
+            translationResult = null;
+            isPlaying = false;
+            currentPlaybackRate = 1.0;
+            
+            document.getElementById('fileInput').value = '';
+            document.getElementById('sourceLanguage').value = 'auto';
+            document.getElementById('targetLanguage').value = '';
+            document.getElementById('voiceType').value = 'standard';
+            document.getElementById('uploadBtn').disabled = true;
+            
+            // Reset upload area
+            const uploadArea = document.getElementById('uploadArea');
+            uploadArea.innerHTML = `
+                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                <h3 class="upload-title">Drag & Drop or Click to Upload</h3>
+                <p class="upload-text">Select your audio or video file in any language</p>
+                <p class="supported-formats">Supported formats: MP3, WAV, MP4, AVI, MOV, M4A, OGG, WEBM, FLAC (Max: 50MB)</p>
+            `;
+            
+            // Reset voice player
+            if (voicePlayer) {
+                voicePlayer.pause();
+                voicePlayer.src = '';
+                updatePlayButton(false);
+            }
+            
+            showForm();
+            hideError();
+        }
+
+        function downloadVoice() {
+            if (!translationResult || !translationResult.download_url) {
+                showError('No voice available for download');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.href = translationResult.download_url;
+            link.download = `voice_translation_${translationResult.detected_source_language}_to_${translationResult.target_language}_${translationResult.session_id}.mp3`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target.closest('button');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                btn.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            });
+        }
+
+        function downloadResult() {
+            if (!translationResult) return;
+            
+            const sourceSelect = document.getElementById('sourceLanguage');
+            const targetSelect = document.getElementById('targetLanguage');
+            const sourceLangName = sourceSelect.options[sourceSelect.selectedIndex].text;
+            const targetLangName = targetSelect.options[targetSelect.selectedIndex].text;
+            
+            const content = `NeuroForge Voice Translation Result
+====================================================
+
+Source Language: ${sourceLangName}
+Target Language: ${targetLangName}
+Detected Language: ${getLanguageName(translationResult.detected_source_language)}
+Voice Type: ${translationResult.voice_type}
+Audio Duration: ${translationResult.audio_duration?.toFixed(1)}s
+
+Original Text:
+${translationResult.original_text}
+
+Translated Text:
+${translationResult.translated_text}
+
+Session ID: ${translationResult.session_id}
+Processing Time: ${translationResult.processing_time}s
+Voice Available: ${translationResult.audio_available ? 'Yes' : 'No'}
+Generated: ${new Date().toLocaleString()}
+`;
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `voice_translation_${translationResult.session_id}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function hideError() {
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function logout() {
+            sessionStorage.removeItem('userSession');
+            window.location.href = '/login';
+        }
+    </script>
+</body>
+</html>

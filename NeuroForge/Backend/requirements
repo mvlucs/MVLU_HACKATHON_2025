@@ -1,0 +1,8 @@
+Flask==2.3.3
+Flask-CORS==4.0.0
+Werkzeug==2.3.7
+SpeechRecognition==3.10.0
+deep-translator==1.11.4
+gTTS==2.3.2
+pydub==0.25.1
+requests==2.31.0
