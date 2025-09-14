@@ -1,0 +1,60 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(120deg, #ffffff, #a8e6a2);
+  color: #2e2e2e;
+  padding: 40px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.header h1 {
+  font-size: 3rem;  /* Increased */
+  color: #1d6b2f;
+  margin-bottom: 15px;
+}
+
+.header p {
+  font-size: 1.3rem;  /* Increased */
+  color: #2f4f2f;
+  opacity: 0.9;
+}
+
+/* Features List */
+.features-list ul {
+  list-style: none;
+  padding-left: 0;
+  max-width: 950px;
+  margin: 0 auto;
+}
+
+.features-list li {
+  font-size: 1.3rem;  /* Increased */
+  margin: 18px 0;
+  padding: 18px 22px;
+  border-left: 6px solid #2e7d32;
+  background: #ffffff;
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.features-list li:hover {
+  transform: translateX(8px);
+  box-shadow: 0 4px 10px rgba(0, 100, 0, 0.18);
+}
+
+.features-list strong {
+  color: #1d6b2f;
+  font-size: 1.4rem; /* Slightly bigger for titles */
+}

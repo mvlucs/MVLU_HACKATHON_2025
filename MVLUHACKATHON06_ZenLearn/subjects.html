@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Subjects - ZenLearn</title>
+  <style>
+    * {margin:0; padding:0; box-sizing:border-box; font-family:"Segoe UI",sans-serif;}
+    body {background:#f9fafb; color:#111;}
+
+    .navbar {
+      background: linear-gradient(90deg, #00b894, #55efc4);
+      color: white; padding: 15px 40px;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .navbar .logo { font-size:20px; font-weight:bold; }
+    .navbar nav a { margin:0 12px; text-decoration:none; color:white; font-weight:500; }
+    .navbar nav a:hover { text-decoration: underline; }
+
+    .subjects { max-width:1100px; margin:40px auto; padding:0 20px; }
+    .subjects h2 { text-align:center; font-size:28px; margin-bottom:30px; color:#0b2540; }
+
+    .grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px;}
+    .card {
+      position:relative; background:#fff; border-radius:12px; padding:20px;
+      box-shadow:0 6px 16px rgba(0,0,0,0.08);
+      text-align:center; transition:transform 0.2s;
+    }
+    .card:hover { transform:translateY(-6px); }
+    .card h3 { margin-bottom:10px; color:#0b2540; }
+    .card p { font-size:14px; color:#555; margin-bottom:15px; }
+
+    .link {
+      display:inline-block; margin:6px 0; padding:8px 12px;
+      background:#0b5fff; color:#fff; text-decoration:none; border-radius:6px;
+      font-size:14px;
+    }
+    .link:hover { background:#093fcc; }
+
+    .fav-btn {
+      position:absolute; top:15px; right:15px;
+      background:none; border:none; font-size:22px;
+      cursor:pointer; color:#bbb; transition:color 0.3s;
+    }
+    .fav-btn.active { color:red; }
+
+    /* Popup */
+    .popup {
+      display:none; position:fixed; top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.6);
+      justify-content:center; align-items:center;
+    }
+    .popup-content {
+      background:#fff; padding:20px 30px; border-radius:10px;
+      text-align:center; font-size:16px; font-weight:bold; color:#0b2540;
+      box-shadow:0 5px 15px rgba(0,0,0,0.3);
+      animation:pop 0.3s ease;
+    }
+    @keyframes pop {from{transform:scale(0.8); opacity:0;} to{transform:scale(1); opacity:1;}}
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">📖 ZenLearn</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="subjects.html">Subjects</a>
+      <a href="favorite.html">Favorites</a>
+    </nav>
+  </header>
+
+  <!-- Subjects -->
+  <section class="subjects">
+    <h2>Subjects</h2>
+    <div class="grid">
+      <div class="card" data-subject="hindi">
+        <button class="fav-btn">❤️</button>
+        <h3>Hindi</h3>
+        <p>Notes, poems and lessons.</p>
+        <a class="link" href="https://drive.google.com/drive/folders/1ky82rZ4rn_ubWkofzVevAxM9QH-ygDHI?usp=drive_link" target="_blank">Complete Notes</a>
+      </div>
+      <div class="card" data-subject="geography">
+        <button class="fav-btn">❤️</button>
+        <h3>Geography</h3>
+        <p>Maps, chapters, worksheets.</p>
+        <a class="link" href="https://drive.google.com/drive/folders/1D_Th9dLwEt1-IakTfGZiT_qeQR-VotE-?usp=drive_link" target="_blank">Complete Notes</a>
+      </div>
+      <div class="card" data-subject="english">
+        <button class="fav-btn">❤️</button>
+        <h3>English</h3>
+        <p>Grammar, comprehension & literature.</p>
+        <a class="link" href="https://drive.google.com/drive/folders/1xJBpPnKZJmTeawBOykYizf3ABXS8E8d-?usp=drive_link" target="_blank">Pdf Notes</a>
+      </div>
+      <div class="card" data-subject="geometry">
+        <button class="fav-btn">❤️</button>
+        <h3>Geometry</h3>
+        <p>Diagrams, proofs and practice.</p>
+        <a class="link" href="https://drive.google.com/drive/folders/1dkPTP_StTqB2ENQqBxgo2erD7R1dzfJE?usp=drive_link" target="_blank">Pdf Notes</a>
+      </div>
+      <div class="card" data-subject="history">
+        <button class="fav-btn">❤️</button>
+        <h3>History & Civics</h3>
+        <p>Timelines and civics notes.</p>
+        <a class="link" href="https://drive.google.com/drive/folders/1lDD8a0gl2UD227lHtaTDLFn_42S8uv0i?usp=drive_link" target="_blank">History & Civics Notes</a>
+      </div>
+      <div class="card" data-subject="marathi">
+        <button class="fav-btn">❤️</button>
+        <h3>Marathi</h3>
+        <p>Language notes & practice.</p>
+        <a class="link" href="https://drive.google.com/drive/folders/1y6HpNcSKa8rSsKyoaOF3w_qP0qAxzF8c?usp=drive_link" target="_blank">Textbook PDFs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popup -->
+  <div class="popup" id="popup">
+    <div class="popup-content" id="popupMsg">Added to Favorites ✅</div>
+  </div>
+
+  <script>
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const popup = document.getElementById("popup");
+    const popupMsg = document.getElementById("popupMsg");
+
+    function showPopup(msg) {
+      popupMsg.textContent = msg;
+      popup.style.display = "flex";
+      setTimeout(()=> popup.style.display="none", 1500);
+    }
+
+    document.querySelectorAll('.card').forEach(card => {
+      const subject = card.getAttribute("data-subject");
+      const favBtn = card.querySelector(".fav-btn");
+
+      if (favorites.includes(subject)) favBtn.classList.add("active");
+
+      favBtn.addEventListener("click", () => {
+        favBtn.classList.toggle("active");
+        if (favBtn.classList.contains("active")) {
+          if (!favorites.includes(subject)) favorites.push(subject);
+          showPopup("Added to Favorites ✅");
+        } else {
+          favorites = favorites.filter(item => item !== subject);
+          showPopup("Removed from Favorites ❌");
+        }
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+      });
+    });
+  </script>
+</body>
+</html>

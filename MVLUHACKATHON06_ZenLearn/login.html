@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zen Learn - Login</title>
+  <style>
+    * {margin:0; padding:0; box-sizing:border-box; font-family:"Segoe UI",sans-serif;}
+    body {
+      display:flex; min-height:100vh;
+      background:linear-gradient(to bottom, #0a0a0f, #111118); color:white;
+    }
+    .left {flex:1; display:flex; flex-direction:column; justify-content:center; padding:60px;}
+    .left h1 {font-size:48px; font-weight:bold;
+      background:linear-gradient(to right, #7f00ff, #56ccf2);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
+    .left h2 {font-size:28px; margin-top:10px;}
+    .left p {margin-top:15px; color:#ccc; font-size:16px;}
+    .quote-box {margin-top:60px;}
+    .quote {font-size:20px; color:#bbb;}
+    .author {font-size:15px; color:#999; font-style:italic;}
+    .dots {display:flex; gap:6px; margin-top:15px;}
+    .dot {width:10px; height:10px; border-radius:50%; background:#555;}
+    .dot.active {background:#7f00ff;}
+    .right {flex:1; display:flex; justify-content:center; align-items:center;}
+    .login-box {background:rgba(0,0,0,0.6); padding:40px; border-radius:15px; width:360px;}
+    .login-box h2 {text-align:center; font-size:24px;
+      background:linear-gradient(to right, #7f00ff, #56ccf2);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
+    .input-group {margin-bottom:15px;}
+    .input-group label {display:block; font-size:14px; color:#ccc; margin-bottom:5px;}
+    .input-group input {
+      width:100%; padding:12px; border:1px solid #333; border-radius:8px;
+      background:#111; color:white; outline:none;
+    }
+    .btn {
+      width:100%; padding:12px; margin-top:10px;
+      background:linear-gradient(to right, #7f00ff, #56ccf2);
+      border:none; border-radius:8px; color:white; font-size:16px; font-weight:bold;
+      cursor:pointer;
+    }
+    .btn:hover {opacity:0.9;}
+    .popup {display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.7); justify-content:center; align-items:center;}
+    .popup-content {background:#1a1a1a; padding:30px; border-radius:12px; text-align:center; width:320px;}
+    .popup-content.success {border:2px solid #6200ff;}
+    .popup-content.error {border:2px solid #ff0033;}
+    .popup-content h3 {color:#fff;}
+    .popup-content p {color:#bbb;}
+  </style>
+</head>
+<body>
+
+  <!-- Left Section -->
+  <div class="left">
+    <h1>Zen Learn</h1>
+    <h2>Transform Your Digital Journey</h2>
+    <p>Login with your registered account to continue.</p>
+    <div class="quote-box">
+      <p class="quote" id="quote">"The only way to do great work is to love what you do."</p>
+      <p class="author" id="author">— Steve Jobs</p>
+      <div class="dots" id="dots"></div>
+    </div>
+  </div>
+
+  <!-- Right Section -->
+  <div class="right">
+    <div class="login-box">
+      <h2>Welcome back</h2>
+      <p>Enter your credentials to access your account</p>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter your email">
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter your password">
+      </div>
+      <button class="btn" id="signInBtn">Sign In</button>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div class="popup" id="popup">
+    <div class="popup-content" id="popupBox">
+      <h3>Login Status</h3>
+      <p id="popupMsg"></p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    const signInBtn = document.getElementById("signInBtn");
+    const popup = document.getElementById("popup");
+    const popupMsg = document.getElementById("popupMsg");
+    const popupBox = document.getElementById("popupBox");
+
+    // Login check
+    signInBtn.addEventListener("click", () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      const storedEmail = localStorage.getItem("userEmail");
+      const storedPass = localStorage.getItem("userPass");
+
+      if (email === storedEmail && password === storedPass) {
+        popupMsg.textContent = `✅ Welcome, ${email}! Redirecting...`;
+        popupBox.classList.add("success");
+        popup.style.display = "flex";
+        setTimeout(()=> window.location.href="index.html", 2000);
+      } else {
+        popupMsg.textContent = "❌ Invalid email or password.";
+        popupBox.classList.add("error");
+        popup.style.display = "flex";
+      }
+    });
+
+    function closePopup(){ popup.style.display="none"; }
+  </script>
+</body>
+</html>

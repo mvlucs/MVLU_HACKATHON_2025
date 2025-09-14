@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZenLearn - Daily Tracker</title>
+<style>
+:root{--bg:#f6fbfc;--card:#fff;--muted:#64748b;--accent:#06b6d4;--accent2:#3b82f6;--success:#16a34a;--danger:#ef4444;--radius:12px}
+body{margin:0;font-family:Segoe UI,Inter,sans-serif;background:var(--bg);color:#0b2540}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:#fff}
+nav a{margin:0 10px;font-weight:600;text-decoration:none;color:#2b4152}
+.container{max-width:1100px;margin:20px auto;padding:0 20px}
+.card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:0 4px 14px rgba(0,0,0,.05);margin-bottom:18px}
+h1{font-size:1.6rem} .muted{color:var(--muted);font-size:13px}
+.btn{padding:7px 12px;border-radius:8px;font-weight:700;cursor:pointer;border:none}
+.btn-ghost{background:#f1f5f9;color:#0b2540} .btn-danger{background:var(--danger);color:#fff}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff}
+.stats{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.big{font-size:26px;font-weight:800}
+.badge{padding:6px 12px;border-radius:8px;font-weight:700;color:#fff}
+.good{background:var(--success)} .bad{background:var(--danger)}
+.bar{height:10px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+table{width:100%;border-collapse:collapse;margin-top:8px}th,td{padding:8px;font-size:14px;border-bottom:1px solid #eee;text-align:left}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">📖 ZenLearn</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="take-quiz.html">Quiz</a>
+    <a href="daily-tracker.html" style="color:var(--accent2)">Daily Tracker</a>
+    <a href="#">Profile</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1>Daily Activity Tracker</h1>
+  <p class="muted">Track today’s active time, quiz attempts, and results.</p>
+
+  <div class="card">
+    <div>Today's Active Time: <span id="time">00:00:00</span></div>
+    <div class="muted" id="date"></div>
+    <button id="pause" class="btn btn-ghost">Pause</button>
+    <button id="reset" class="btn btn-ghost">Reset Today</button>
+    <button id="clear" class="btn btn-danger">Clear Tracker</button>
+  </div>
+
+  <div class="card">
+    <h3>Attempts Summary</h3>
+    <div id="attempts"></div>
+  </div>
+
+  <div class="card stats">
+    <div><div>Total Attempts</div><div id="tot" class="big">0</div></div>
+    <div><div>Sets Attempted</div><div id="sets" class="big">0</div></div>
+    <div><div>Last Score</div><div id="lastScore" class="big">—</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Last Test Result</h3>
+    <div id="meta" class="muted"></div>
+    <div class="big" id="score">— / 10</div>
+    <div><span id="c" class="badge good">✓ 0</span> <span id="w" class="badge bad">✕ 0</span></div>
+  </div>
+
+  <div class="card">
+    <h3>History</h3>
+    <table><thead><tr><th>Date</th><th>Subject</th><th>Set</th><th>Score</th><th>Feedback</th></tr></thead>
+      <tbody id="hist"></tbody></table>
+  </div>
+</main>
+
+<script>
+const keyToday=()=>new Date().toISOString().slice(0,10),f=s=>String(s).padStart(2,"0");
+const fmt=t=>`${f(t/3600|0)}:${f((t/60|0)%60)}:${f(t%60)}`;
+const g=k=>+localStorage.getItem(k)||0,p=(k,v)=>localStorage.setItem(k,v);
+
+function tick(){if(run){let t=g("act_"+keyToday())+1;p("act_"+keyToday(),t);time.textContent=fmt(t);}}
+function render(){
+  date.textContent=new Date().toDateString();
+  time.textContent=fmt(g("act_"+keyToday()));
+  // attempts
+  let tot=0, subj={},rows="";
+  for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k.startsWith("attempts_")){let [_,s]=k.split("_",2);let v=+localStorage.getItem(k);subj[s]=(subj[s]||0)+v;tot+=v;}}
+  for(let s in subj) rows+=`<div>${s}: ${subj[s]}<div class="bar" style="width:${subj[s]*33}%"></div></div>`;
+  attempts.innerHTML=rows||"No attempts yet";tot.textContent=tot;sets.textContent=Object.keys(subj).length;
+  // last result
+  let sc=localStorage.getItem("lastScore");if(sc){let sub=localStorage.getItem("lastSubject"),set=localStorage.getItem("lastSet"),t=localStorage.getItem("lastTimeTaken");
+    score.textContent=`${sc}/10`;lastScore.textContent=`${sc}/10`;meta.textContent=`${sub} Set ${set}`;c.textContent="✓ "+sc;w.textContent="✕ "+(10-sc);}
+  // history
+  let h="";for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k.startsWith("feedback_")){let v=localStorage.getItem(k);h+=`<tr><td>${new Date().toLocaleString()}</td><td>-</td><td>-</td><td>-</td><td>${v}</td></tr>`;}}
+  hist.innerHTML=h||"<tr><td colspan=5>No history</td></tr>";
+}
+let run=1;setInterval(tick,1000);render();
+pause.onclick=()=>{run^=1;pause.textContent=run?"Pause":"Resume";}
+reset.onclick=()=>{if(confirm("Reset today?"))p("act_"+keyToday(),0),render();}
+clear.onclick=()=>{if(confirm("Clear all tracker?")){for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k.startsWith("act_")||k.startsWith("feedback_"))localStorage.removeItem(k);}render();}}
+</script>
+</body>
+</html>

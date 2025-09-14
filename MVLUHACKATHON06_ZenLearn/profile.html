@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZenLearn - Profile</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:"Segoe UI", sans-serif; }
+
+    body {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9); /* white-green bg */
+      color: #222;
+    }
+
+    /* 🔹 Navbar */
+    .navbar {
+      background: linear-gradient(90deg, #00b894, #55efc4);
+      color: white;
+      padding: 15px 40px;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .navbar .logo { font-size:20px; font-weight:bold; }
+    .navbar nav a {
+      margin: 0 12px; text-decoration: none; color: white; font-weight: 500;
+    }
+    .navbar nav a:hover { text-decoration: underline; }
+
+    /* 🔹 Profile Box */
+    .profile-box {
+      max-width: 450px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 35px;
+      border-radius: 15px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+    h2 { margin-bottom: 15px; font-size: 24px; color: #00796b; }
+
+    label {
+      display: block; text-align: left; margin: 6px 0 4px;
+      font-size: 14px; color: #333;
+    }
+    input {
+      width: 100%; padding: 10px; margin-bottom: 12px;
+      border-radius: 8px; border: 1px solid #ccc; outline: none;
+    }
+    input:focus { border-color: #00b894; }
+
+    .btn {
+      width: 100%; padding: 12px; margin-top: 8px;
+      background: linear-gradient(to right, #00b894, #55efc4);
+      border: none; border-radius: 8px;
+      color: white; font-weight: bold; cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover { opacity: 0.85; }
+
+    /* 🔹 Profile Card */
+    .profile-card { display:none; }
+    .profile-card img {
+      width: 100px; height: 100px; border-radius: 50%;
+      border: 3px solid #00b894; margin-bottom: 12px;
+      object-fit: cover;
+    }
+    .profile-card h3 { margin-bottom: 6px; color: #222; }
+    .profile-card p { margin: 4px 0; color: #444; }
+    .highlight { color: #00796b; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">📖 ZenLearn</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="subjects.html">Subjects</a>
+      <a href="take-quiz.html">Quiz</a>
+      <a href="daily-tracker.html">Tracker</a>
+      <a href="favorites.html">Favorites</a>
+      <a href="profile.html">Profile</a>
+    </nav>
+  </header>
+
+  <!-- Profile Box -->
+  <div class="profile-box" id="profileBox">
+    <!-- Form -->
+    <form id="profileForm">
+      <h2>Create Profile</h2>
+
+      <!-- Profile Picture Upload -->
+      <label>Profile Picture</label>
+      <input type="file" id="picUpload" accept="image/*">
+
+      <label>Name</label>
+      <input type="text" id="name" required>
+      <label>Email</label>
+      <input type="email" id="email" required>
+      <label>Role</label>
+      <input type="text" id="role" required>
+      <label>Age</label>
+      <input type="number" id="age" required>
+      <label>Date of Birth</label>
+      <input type="date" id="dob" required>
+      <button type="submit" class="btn">Save Profile</button>
+    </form>
+
+    <!-- Profile Card -->
+    <div class="profile-card" id="profileCard">
+      <img id="outPic" src="https://i.pravatar.cc/150?img=47" alt="Profile">
+      <h3 id="outName"></h3>
+      <p><span class="highlight">Email:</span> <span id="outEmail"></span></p>
+      <p><span class="highlight">Role:</span> <span id="outRole"></span></p>
+      <p><span class="highlight">Age:</span> <span id="outAge"></span></p>
+      <p><span class="highlight">DOB:</span> <span id="outDob"></span></p>
+      <button class="btn" onclick="editProfile()">Edit Profile</button>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("profileForm");
+    const card = document.getElementById("profileCard");
+    const picUpload = document.getElementById("picUpload");
+    let uploadedPic = "https://i.pravatar.cc/150?img=47"; // default
+
+    // Preview upload and save base64
+    picUpload.addEventListener("change", (e) => {
+      const reader = new FileReader();
+      reader.onload = () => { uploadedPic = reader.result; };
+      reader.readAsDataURL(e.target.files[0]);
+    });
+
+    // Load profile if exists
+    window.onload = () => {
+      const profile = JSON.parse(localStorage.getItem("profile"));
+      if(profile){ showProfile(profile); }
+    };
+
+    // Save Profile
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const profile = {
+        pic: uploadedPic,
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        role: document.getElementById("role").value,
+        age: document.getElementById("age").value,
+        dob: document.getElementById("dob").value
+      };
+      localStorage.setItem("profile", JSON.stringify(profile));
+      showProfile(profile);
+    });
+
+    // Show Profile
+    function showProfile(profile){
+      form.style.display = "none";
+      card.style.display = "block";
+      document.getElementById("outPic").src = profile.pic || "https://i.pravatar.cc/150?img=47";
+      document.getElementById("outName").textContent = profile.name;
+      document.getElementById("outEmail").textContent = profile.email;
+      document.getElementById("outRole").textContent = profile.role;
+      document.getElementById("outAge").textContent = profile.age;
+      document.getElementById("outDob").textContent = profile.dob;
+    }
+
+    // Edit Profile
+    function editProfile(){
+      const profile = JSON.parse(localStorage.getItem("profile"));
+      if(profile){
+        document.getElementById("name").value = profile.name;
+        document.getElementById("email").value = profile.email;
+        document.getElementById("role").value = profile.role;
+        document.getElementById("age").value = profile.age;
+        document.getElementById("dob").value = profile.dob;
+        uploadedPic = profile.pic || "https://i.pravatar.cc/150?img=47";
+      }
+      form.style.display = "block";
+      card.style.display = "none";
+    }
+  </script>
+
+</body>
+</html>

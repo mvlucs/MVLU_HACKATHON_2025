@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZenLearn</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+<header class="navbar">
+    <div class="logo">📖 ZenLearn</div>
+    <nav>
+      <a href="about.html" onclick="openPopup('about')">About</a>
+      <a href="take-quiz.html">Quiz</a>
+      <a href="daily-tracker.html">Daily Activity Tracker</a>
+      <a href="favorite.html">Favorite Topics</a>
+      <a href="subjects.html">Subjects</a> <!-- 🔹 New Subjects link -->
+      <a href="profile.html">Profile</a>
+      <!-- Mute Button inside navbar -->
+      <button id="muteBtn" class="mute-btn">🔇</button>
+    </nav>
+  </header>
+  
+
+  <!-- Hero with Background Video -->
+  <section class="video-section">
+    <video id="bgVideo" autoplay muted loop>
+      <source src="bgvideo.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+
+    <div class="video-overlay">
+      <div class="badge">Transform Your Learning Journey</div>
+      <h1><span class="highlight">ZenLearn</span><br>Your Mindful Learning Companion</h1>
+      <p>Discover a peaceful way to learn with personalized quizzes, daily activity tracking, and curated topics that inspire your growth journey.</p>
+      <div class="hero-buttons">
+        <a href="explore.html" class="btn-primary">Explore Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div><h2 id="learners">0</h2><p>Active Learners</p></div>
+    <div><h2 id="quizzes">0</h2><p>Quizzes Completed</p></div>
+    <div><h2 id="satisfaction">0%</h2><p>Satisfaction Rate</p></div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <h2>Everything You Need To Learn Mindfully</h2>
+    <p>ZenLearn provides all the tools you need for a focused, peaceful, and effective learning experience.</p>
+    
+    <div class="feature-grid">
+      <a href="about.html" class="card-link">
+        <div class="card">📖 
+          <h3>About</h3>
+          <p>Discover your learning path.</p>
+        </div>
+      </a>
+
+      <a href="take-quiz.html" class="card-link">
+        <div class="card">🧠 
+          <h3>Quiz</h3>
+          <p>Challenge yourself with quizzes.</p>
+        </div>
+      </a>
+
+      <a href="daily-tracker.html" class="card-link">
+        <div class="card">📅 
+          <h3>Daily Tracker</h3>
+          <p>Build habits with reminders.</p>
+        </div>
+      </a>
+
+      <a href="favorite.html" class="card-link">
+        <div class="card">❤️ 
+          <h3>Favorite Topics</h3>
+          <p>Save topics for later.</p>
+        </div>
+      </a>
+
+      <a href="profile.html" class="card-link">
+        <div class="card">👤 
+          <h3>Profile</h3>
+          <p>Track achievements & streaks.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">📖 ZenLearn</div>
+    <p>Transform your journey with mindful, personalized education.</p>
+    <div class="socials">
+      <a href="#" onclick="openPopup('github')">💻 GitHub</a>
+    </div>
+    <p class="copyright">© 2025 ZenLearn. Crafted with mindfulness for better learning.</p>
+  </footer>
+
+  <!-- Popup -->
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup()">&times;</span>
+      <h2 id="popup-title"></h2>
+      <p id="popup-text"></p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+  <script>
+    // Background Video Control
+    const video = document.getElementById("bgVideo");
+    const muteBtn = document.getElementById("muteBtn");
+
+    muteBtn.addEventListener("click", () => {
+      video.muted = !video.muted;
+      muteBtn.textContent = video.muted ? "🔇" : "🔊";
+    });
+  </script>
+</body>
+</html>
